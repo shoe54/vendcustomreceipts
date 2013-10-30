@@ -14,13 +14,16 @@ function openOptions(tab) {
 function initDefaults() {
   var template = localStorage["template"];
   if (!template) {
-    $.getJSON(chrome.extension.getURL('/defaulttemplate.json'), function(defaultTemplate) {
-      if (!defaultTemplate) {
-        return;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', chrome.extension.getURL('/defaulttemplate.mustache'), true);
+    xhr.onreadystatechange = function()
+    {
+      if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200)
+      {
+        localStorage["template"] = xhr.responseText;
       }
-      localStorage["template"] = JSON.stringify(defaultTemplate, undefined, 2);  
-    });
-    //localStorage["template"] = "defaultTemplate";
+    };
+    xhr.send();
   }
 }
 
