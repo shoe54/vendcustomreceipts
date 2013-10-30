@@ -8,13 +8,20 @@ var n = this,
     j = (j = i.length) > 3 ? j % 3 : 0;
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
- 
+
+function parseUrl( url ) {
+    var a = document.createElement('a');
+    a.href = url;
+    return a;
+}
+
 // Called when the url of a tab changes.
 function checkForValidUrl(tabId, changeInfo, tab) {
   // If the letter 'g' is found in the tab's URL...
   if (tab.url.indexOf('.vendhq.com') > -1) {
     // ... show the page action.
     chrome.pageAction.show(tabId);
+	//initVendData(tab.url);
   }
 };
 
@@ -38,17 +45,23 @@ function initDefaults() {
   }
 }
 
-function generateReceipt(template, saleJSONStr) {
-  var saleJSON = JSON.parse(saleJSONStr);
+/*function initVendData(url) {
+	var oLocation = parseUrl(url);
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', chrome.extension.getURL(oLocation.href + "api/payment_types"), true);
+    xhr.onreadystatechange = function()
+    {
+      if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200)
+      {
+        alert( xhr.responseText );
+      }
+    };
+    xhr.send();
+}*/
+
+function generateReceipt(template, saleJSON) {
+  //var saleJSON = JSON.parse(saleJSONStr);
   
-  // Inject useful data into sale JSON
-  for (var i = 0; i < saleJSON.register_sale_products.length; i++) {
-    saleJSON.register_sale_products[i].total = (saleJSON.register_sale_products[i].quantity * saleJSON.register_sale_products[i].price).formatMoney();
-	saleJSON.register_sale_products[i].price = saleJSON.register_sale_products[i].price.formatMoney();
-  }
-  saleJSON.total = (saleJSON.total_price + saleJSON.total_tax).formatMoney();
-  saleJSON.total_price = saleJSON.total_price.formatMoney();
-  saleJSON.total_tax = saleJSON.total_tax.formatMoney();
   console.log("Generating receipt for " + JSON.stringify(saleJSON, undefined, 2));  
   var output = Mustache.render(template, saleJSON);
   return output;
@@ -79,10 +92,21 @@ chrome.webRequest.onBeforeRequest.addListener(
 	var arrayBuf = details.requestBody.raw[0].bytes;
 	//console.log(arrayBuf);
 	//var tmp = ab2str(str2ab("asdfg"));
-	var saleJSON = String.fromCharCode.apply(null, new Uint8Array(arrayBuf));
+	var saleJSONStr = String.fromCharCode.apply(null, new Uint8Array(arrayBuf));
     //alert(details.requestBody.raw)
     var template = localStorage["template"];
-	var receipt = generateReceipt(template, saleJSON);
+
+ 	// Inject useful data into sale JSON
+    var saleJSON = JSON.parse(saleJSONStr);
+    for (var i = 0; i < saleJSON.register_sale_products.length; i++) {
+      saleJSON.register_sale_products[i].total = (saleJSON.register_sale_products[i].quantity * saleJSON.register_sale_products[i].price).formatMoney();
+	  saleJSON.register_sale_products[i].price = saleJSON.register_sale_products[i].price.formatMoney();
+    }
+    saleJSON.total = (saleJSON.total_price + saleJSON.total_tax).formatMoney();
+    saleJSON.total_price = saleJSON.total_price.formatMoney();
+    saleJSON.total_tax = saleJSON.total_tax.formatMoney();
+
+    var receipt = generateReceipt(template, saleJSON);
     var myWindow=window.open('','');
     myWindow.document.write(receipt);
     myWindow.document.close();
