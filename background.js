@@ -27,9 +27,11 @@ function initDefaults() {
   }
 }
 
-function generateReceipt(saleJSON) {
-  console.log("Generating receipt for " + saleJSON);
-  return saleJSON;
+function generateReceipt(saleJSONStr) {
+  console.log("Generating receipt for " + saleJSONStr);
+  var template = localStorage["template"];
+  var output = Mustache.render(template, JSON.parse(saleJSONStr));
+  return output;
 }
 
 /*function ab2str(buf) {
