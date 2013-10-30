@@ -1,3 +1,14 @@
+Number.prototype.formatMoney = function(c, d, t){
+var n = this, 
+    c = isNaN(c = Math.abs(c)) ? 2 : c, 
+    d = d == undefined ? "." : d, 
+    t = t == undefined ? "," : t, 
+    s = n < 0 ? "-" : "", 
+    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+    j = (j = i.length) > 3 ? j % 3 : 0;
+   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
+ 
 // Called when the url of a tab changes.
 function checkForValidUrl(tabId, changeInfo, tab) {
   // If the letter 'g' is found in the tab's URL...
@@ -28,8 +39,18 @@ function initDefaults() {
 }
 
 function generateReceipt(template, saleJSONStr) {
-  console.log("Generating receipt for " + saleJSONStr);
-  var output = Mustache.render(template, JSON.parse(saleJSONStr));
+  var saleJSON = JSON.parse(saleJSONStr);
+  
+  // Inject useful data into sale JSON
+  for (var i = 0; i < saleJSON.register_sale_products.length; i++) {
+    saleJSON.register_sale_products[i].total = (saleJSON.register_sale_products[i].quantity * saleJSON.register_sale_products[i].price).formatMoney();
+	saleJSON.register_sale_products[i].price = saleJSON.register_sale_products[i].price.formatMoney();
+  }
+  saleJSON.total = (saleJSON.total_price + saleJSON.total_tax).formatMoney();
+  saleJSON.total_price = saleJSON.total_price.formatMoney();
+  saleJSON.total_tax = saleJSON.total_tax.formatMoney();
+  console.log("Generating receipt for " + JSON.stringify(saleJSON, undefined, 2));  
+  var output = Mustache.render(template, saleJSON);
   return output;
 }
 

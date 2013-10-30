@@ -23,9 +23,9 @@
                 <span id="item-label">{{quantity}} {{name}}</span>
             </td>
             <td id="item-subtotal">
-                <span id="item-label">@{{price}}</span>
+                <span id="item-label">@ {{price}}</span>
             </td>
-            <td id="item-total" class="total-amount" style="color: rgb(0, 0, 0);">$0.00</td>
+            <td id="item-total" class="total-amount" style="color: rgb(0, 0, 0);">{{total}}</td>
             <td class="action"></td>
         </tr>
 		{{/register_sale_products}}
@@ -52,7 +52,7 @@
             <td class="total-item">
                 <span id="total-label">TOTAL</span>
             </td>
-            <td id="sale-totals-total" class="total-amount" style="color: rgb(0, 0, 0);">$0.00</td>
+            <td id="sale-totals-total" class="total-amount" style="color: rgb(0, 0, 0);">${{total}}</td>
             <td class="action"></td>
         </tr>
     </tbody>
