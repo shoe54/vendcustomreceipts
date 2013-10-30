@@ -36,7 +36,8 @@ $( document ).ready(function() {
         save_options();
 	});
     $( "#transform" ).on( "click", function() {
-        var receipt = chrome.extension.getBackgroundPage().generateReceipt(document.getElementById("json").value);
+        var receipt = chrome.extension.getBackgroundPage().generateReceipt(document.getElementById("template").value, document.getElementById("json").value);
+		document.getElementById('result').contentWindow.document.body.innerHTML = "";
 		document.getElementById('result').contentWindow.document.write(receipt);
 	});
 });

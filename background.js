@@ -27,9 +27,8 @@ function initDefaults() {
   }
 }
 
-function generateReceipt(saleJSONStr) {
+function generateReceipt(template, saleJSONStr) {
   console.log("Generating receipt for " + saleJSONStr);
-  var template = localStorage["template"];
   var output = Mustache.render(template, JSON.parse(saleJSONStr));
   return output;
 }
@@ -61,7 +60,8 @@ chrome.webRequest.onBeforeRequest.addListener(
 	//var tmp = ab2str(str2ab("asdfg"));
 	var saleJSON = String.fromCharCode.apply(null, new Uint8Array(arrayBuf));
     //alert(details.requestBody.raw)
-	var receipt = generateReceipt(saleJSON);
+    var template = localStorage["template"];
+	var receipt = generateReceipt(template, saleJSON);
     var myWindow=window.open('','');
     myWindow.document.write(receipt);
     myWindow.document.close();
