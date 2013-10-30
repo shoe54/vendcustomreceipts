@@ -1,0 +1,41 @@
+<html>
+<link rel="stylesheet" type="text/css" media="screen" href="vend.css">
+<link rel="stylesheet" type="text/css" media="screen" href="style.css">
+
+<script src="jquery-1.7.2.min.js"></script>
+
+<script src="options.js"></script>
+<body>
+<table width="100%" height="100%">
+  <tr>
+    <td width="50%">
+	  <div id="left">
+        <label for="template">Template</label>
+	    <textarea id="template"></textarea>
+        <button id="save">Save Template</button>
+	  </div>
+    </td>
+	<td width="50%">
+	  <div id="right">
+	    <div class="half">
+          <label for="json">Sample sale JSON</label>
+	      <textarea id="json"></textarea>
+		</div>
+	    <div class="half">
+          <table>
+            <tr>
+              <td style="vertical-align: bottom;"><label for="result">Result</label></td>
+              <td width="99%" style="text-align: right;"><button id="transform">Refresh</button></td>
+            </tr>
+          </table>
+          <iframe id="result"></iframe>
+	      <!--<textarea id="result"></textarea>-->
+		</div>
+	  </div>
+	</td>
+  </tr>
+</table>
+</body>
+
+
+</html>

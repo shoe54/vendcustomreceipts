@@ -1,0 +1,19 @@
+{
+  "name": "Vend Receipt Customizer",
+  "version": "1.0",
+  "description": "Customize your Vend receipts the way you want to.",
+  "icons": { "128": "images/icon_128.png" },
+  "background": {
+    //"persistent": false,
+    //"scripts": ["background.js"]
+	"page": "background.html"
+  },
+  "permissions": ["webRequest", "webRequestBlocking", "tabs", "http://*.vendhq.com/", "https://*.vendhq.com/"],
+  "page_action": {
+    "default_title": "Vend Receipt Customizer",
+    "default_icon": "images/icon_032.png"
+    //"default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "manifest_version": 2
+}

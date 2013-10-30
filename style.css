@@ -1,0 +1,21 @@
+td {
+  vertical-align: top;
+}
+#left, #right {
+  height: 100%;
+}
+
+.half  {
+  height: 50%;
+}
+#template, #json {
+  height: 89%;
+  width: 100%;
+}
+#result {
+  height: 89%;
+  width: 99%;
+}
+/*#transform {
+  float: right;
+}*/
