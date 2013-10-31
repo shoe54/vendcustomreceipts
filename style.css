@@ -12,6 +12,7 @@ td {
   height: 89%;
   width: 100%;
   font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
   overflow: auto;
 }
 #result {
@@ -21,3 +22,6 @@ td {
 /*#transform {
   float: right;
 }*/
+a {
+  font-size: 14px;
+}
