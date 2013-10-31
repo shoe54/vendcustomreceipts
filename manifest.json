@@ -15,5 +15,12 @@
     //"default_popup": "popup.html"
   },
   "options_page": "options.html",
+  "content_scripts": [
+    {
+      //"matches": ["http://*.vendhq.com/register_sale/viewreceipt_content/id/*", "https://*.vendhq.com/register_sale/viewreceipt_content/id/*"],
+	  "matches": ["http://*.vendhq.com/register_sale/viewreceipt/*", "https://*.vendhq.com/register_sale/viewreceipt/*"],
+      "js": ["viewreceipt_contentscript.js"]
+    }
+  ],
   "manifest_version": 2
 }
