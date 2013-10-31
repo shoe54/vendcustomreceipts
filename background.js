@@ -44,7 +44,7 @@ function initDefaults() {
   var template = localStorage["template"];
   if (!template) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', chrome.extension.getURL('/defaulttemplate.mustache'), true);
+    xhr.open('GET', chrome.extension.getURL('/defaulttemplate.jsrender'), true);
     xhr.onreadystatechange = function()
     {
       if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200)
@@ -150,11 +150,12 @@ function formatSaleJSONMoneys(saleJSON) {
 }
 
 function generateReceipt(template, saleJSON) {
-  //var saleJSON = JSON.parse(saleJSONStr);
   formatSaleJSONMoneys(saleJSON);
   
   console.log("Generating receipt for " + JSON.stringify(saleJSON, undefined, 2));  
-  var output = Mustache.render(template, saleJSON);
+  var template = $.templates(template);
+  var output = template.render(saleJSON);
+  //var output = Mustache.render(template, saleJSON);
   return output;
 }
 

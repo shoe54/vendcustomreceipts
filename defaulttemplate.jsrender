@@ -1,0 +1,105 @@
+{{for register_sales}}
+<div id="receipt" style="text-align: center;">
+
+<div id="receipt-header"><h1>{{:~root.config.retailer_name}}</h1><h1></h1></div>
+
+<div id="receipt-customer"></div>
+
+<div class="clearer"></div>
+
+<h1 id="invoice-title">Receipt / Tax Invoice</h1>
+
+<div id="receipt-meta"><span class="invoice-number">Invoice #: {{:invoice_number}}</span> <span class="date">{{:sale_date}}</span> <span>Served by: {{:~root.config.user_display_name}}</span></div>
+
+<div id="receipt-meta-extra"></div>
+
+<div class="clearer"></div>
+
+<div id="receipt-content">
+<table id="table_sale_items" class="">
+	<tbody>
+	    {{for register_sale_products}}
+        <tr>
+            <td class="item">
+                <span id="item-label">{{:quantity}} {{:name}}</span>
+            </td>
+            <td id="item-subtotal">
+                <span id="item-label">@ {{:price}}</span>
+            </td>
+            <td id="item-total" class="total-amount" style="color: rgb(0, 0, 0);">{{:price_total}}</td>
+            <td class="action"></td>
+        </tr>
+		{{/for}}
+	</tbody>
+</table>
+<table id="table-sale-totals" class="accounts">
+    <tbody>
+        <tr>
+            <td class="total-item">
+                <span id="subtotal-label">Subtotal</span>
+            </td>
+            <td id="sale-subtotal" class="total-amount" style="color: rgb(0, 0, 0);">{{:~root.config.currency_name}}{{:totals.total_price}}</td>
+            <td class="action"></td>
+        </tr>
+        <tr>
+            <td class="total-item">
+                <span id="tax-label">Tax</span>
+                <span id="tax-name"></span>
+            </td>
+            <td id="sale-totals-taxes" class="total-amount " style="color: rgb(0, 0, 0);">{{:~root.config.currency_name}}{{:totals.total_tax}}</td>
+            <td class="action"><span><a href="#delete-tax" id="btn-remove-tax" class="circle-btn circle-btn--danger touchscreen-btn" title="Remove the tax from the sale"><i class="icon-general-cross-white"></i></a></span></td>
+        </tr>
+        <tr class="sub-total">
+            <td class="total-item">
+                <span id="total-label">TOTAL</span>
+            </td>
+            <td id="sale-totals-total" class="total-amount" style="color: rgb(0, 0, 0);">{{:~root.config.currency_name}}{{:totals.total_payment}}</td>
+            <td class="action"></td>
+        </tr>
+    </tbody>
+</table><table id="table-payment-totals" class="accounts">
+    <tbody>
+	    {{for register_sale_payments}}
+        <tr>
+            <td class="total-item">
+                <span id="item-label">
+                    {{if amount < 0}}
+                       Change
+                    {{else}}
+                       {{:name}}
+                    {{/if}}                    
+				</span>
+            </td>
+            <td class="total-amount" style="color: rgb(0, 0, 0);">{{:~root.config.currency_name}}{{:amount}}</td>
+            <td class="action"></td>
+        </tr>
+		{{/for}}
+        <tr id="topay" class="total">
+            <td class="total-item">
+                <span class="topay-label">TO PAY</span>
+            </td>
+            <td class=" payment-totals-topay total-amount" style="color: rgb(0, 0, 0);">{{:~root.config.currency_name}}{{:totals.total_to_pay}}</td>
+            <td class="action"></td>
+        </tr>
+    </tbody>
+</table></div>
+
+<div class="clearer"></div>
+
+<div id="receipt-note"></div>
+
+<div class="clearer"></div>
+
+<div id="receipt-html-extra"><p></p></div>
+
+<div class="clearer"></div>
+
+<p id="receipt-copy">Customer copy</p>
+
+
+<div id="receipt-footer"><h1>Thanks for stopping by</h1><h1></h1></div>
+
+
+    </div>
+{{/for}}
+	

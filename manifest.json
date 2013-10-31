@@ -1,18 +1,18 @@
 {
+  "manifest_version": 2,
   "name": "Vend Receipt Customizer",
+  //"short_name": "Vend Receipt",
   "version": "1.0",
   "description": "Customize your Vend receipts the way you want to.",
   "icons": { "128": "images/icon_128.png" },
   "background": {
-    //"persistent": false,
-    //"scripts": ["background.js"]
 	"page": "background.html"
   },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "permissions": ["webRequest", "webRequestBlocking", "tabs", "http://*.vendhq.com/", "https://*.vendhq.com/"],
   "page_action": {
     "default_title": "Vend Receipt Customizer",
     "default_icon": "images/icon_032.png"
-    //"default_popup": "popup.html"
   },
   "options_page": "options.html",
   "content_scripts": [
@@ -24,6 +24,5 @@
 	  "matches": ["http://*.vendhq.com/register_sale/viewreceipt/*", "https://*.vendhq.com/register_sale/viewreceipt/*"],
       "js": ["viewreceipt_contentscript.js"]
     }
-  ],
-  "manifest_version": 2
+  ]
 }

@@ -12,6 +12,7 @@ td {
   height: 89%;
   width: 100%;
   font-family: "Courier New", Courier, monospace;
+  overflow: auto;
 }
 #result {
   height: 89%;
