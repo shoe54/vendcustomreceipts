@@ -62,47 +62,68 @@ function initDefaults() {
     xhr.send();
 }*/
 
-function extendSaleJSON(saleJSON) {
-
-    // Format money and calculate totals
-    for (var i = 0; i < saleJSON.register_sale_products.length; i++) {
-      saleJSON.register_sale_products[i].total = (saleJSON.register_sale_products[i].quantity * saleJSON.register_sale_products[i].price).formatMoney();
-	  saleJSON.register_sale_products[i].price = saleJSON.register_sale_products[i].price.formatMoney();
-    }
-	var total = saleJSON.total_price + saleJSON.total_tax;
-    saleJSON.total = total.formatMoney();
-    saleJSON.total_price = saleJSON.total_price.formatMoney();
-    saleJSON.total_tax = saleJSON.total_tax.formatMoney();
-	
+function normalizeSaleJSON(saleJSON) {
 	// Specify readable payment types
     for (var i = 0; i < saleJSON.register_sale_payments.length; i++) {
       for (var j = 0; j < paymentTypes.payment_types.length; j++) {
 	    if (saleJSON.register_sale_payments[i].retailer_payment_type_id == paymentTypes.payment_types[j].id) {
-		  if (saleJSON.register_sale_payments[i].amount < 0)
-		    saleJSON.register_sale_payments[i].retailer_payment_type_name = "Change";
-		  else
-		    saleJSON.register_sale_payments[i].retailer_payment_type_name = paymentTypes.payment_types[j].name;
+		  //if (saleJSON.register_sale_payments[i].amount < 0)
+		  //  saleJSON.register_sale_payments[i].name = "Change";
+		  //else
+		    saleJSON.register_sale_payments[i].name = paymentTypes.payment_types[j].name;
 		  break;
 		}
 	  }
 	}
 	
-	// Format money and calculate topay
+    // Calculate totals
+    for (var i = 0; i < saleJSON.register_sale_products.length; i++) {
+      saleJSON.register_sale_products[i].price_total = saleJSON.register_sale_products[i].quantity * saleJSON.register_sale_products[i].price;
+    }
+
+	var total = saleJSON.total_price + saleJSON.total_tax;
 	var toPay = total;
+	
     for (var i = 0; i < saleJSON.register_sale_payments.length; i++) {
 	  toPay = toPay - saleJSON.register_sale_payments[i].amount;
-	  saleJSON.register_sale_payments[i].amount = saleJSON.register_sale_payments[i].amount.formatMoney();
 	}
-	saleJSON.toPay = toPay.formatMoney();
+	saleJSON.totals = { 
+     "total_to_pay"    :   toPay, 
+     "total_tax"       :   saleJSON.total_tax, 
+     "total_price" :   saleJSON.total_price,
+	 "total_payment" : saleJSON.total_tax + saleJSON.total_price
+    };
 	
+	return saleJSON;
+}
+
+function extendSaleJSON(saleJSON) {
+
 	// Include config info 
 	saleJSON.config = config.config;
 	
 	return saleJSON;
 }
 
+function formatMoney(saleJSON) {
+    for (var i = 0; i < saleJSON.register_sale_products.length; i++) {
+      saleJSON.register_sale_products[i].price_total = saleJSON.register_sale_products[i].price_total.formatMoney();
+	  saleJSON.register_sale_products[i].price = saleJSON.register_sale_products[i].price.formatMoney();
+    }
+    //saleJSON.total = total.formatMoney();
+    saleJSON.totals.total_price = saleJSON.totals.total_price.formatMoney();
+    saleJSON.totals.total_tax = saleJSON.totals.total_tax.formatMoney();
+    saleJSON.totals.total_to_pay = saleJSON.totals.total_to_pay.formatMoney();
+    saleJSON.totals.total_payment = saleJSON.totals.total_payment.formatMoney();
+	
+    for (var i = 0; i < saleJSON.register_sale_payments.length; i++) {
+	  saleJSON.register_sale_payments[i].amount = saleJSON.register_sale_payments[i].amount.formatMoney();
+	}
+}
+
 function generateReceipt(template, saleJSON) {
   //var saleJSON = JSON.parse(saleJSONStr);
+  formatMoney(saleJSON);
   
   console.log("Generating receipt for " + JSON.stringify(saleJSON, undefined, 2));  
   var output = Mustache.render(template, saleJSON);
@@ -143,6 +164,7 @@ chrome.webRequest.onBeforeRequest.addListener(
 	// If sale status is not VOIDED, print receipt
 	if (saleJSON.status != "VOIDED") {
       // Inject useful data into sale JSON
+	  saleJSON = normalizeSaleJSON(saleJSON);
 	  saleJSON = extendSaleJSON(saleJSON);
 
       var receipt = generateReceipt(template, saleJSON);
