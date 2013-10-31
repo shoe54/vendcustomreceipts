@@ -58,11 +58,20 @@
     </tbody>
 </table><table id="table-payment-totals" class="accounts">
     <tbody>
-                <tr id="topay" class="total">
+	    {{#register_sale_payments}}
+        <tr>
+            <td class="total-item">
+                <span id="item-label">{{retailer_payment_type_name}}</span>
+            </td>
+            <td class="total-amount" style="color: rgb(0, 0, 0);">$ {{amount}}</td>
+            <td class="action"></td>
+        </tr>
+		{{/register_sale_payments}}
+        <tr id="topay" class="total">
             <td class="total-item">
                 <span class="topay-label">TO PAY</span>
             </td>
-            <td class=" payment-totals-topay total-amount" style="color: rgb(0, 0, 0);">$0.00</td>
+            <td class=" payment-totals-topay total-amount" style="color: rgb(0, 0, 0);">$ {{toPay}}</td>
             <td class="action"></td>
         </tr>
     </tbody>
