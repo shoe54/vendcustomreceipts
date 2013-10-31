@@ -6,7 +6,8 @@ function parseUrl( url ) {
 
 function generateReceipt(saleJSONStr) {
 	chrome.runtime.sendMessage({"command": "generateReceipt", "saleJSONStr": saleJSONStr}, function(response) {
-		alert("res " + response);
+		document.getElementById('view-receipt').contentWindow.document.write("<style type=\"text/css\" media=\"print\">.no-print, .no-print * { display: none !important; }</style><button class=\"no-print\" onClick=\"window.print()\" >Print</button>");
+		document.getElementById('view-receipt').contentWindow.document.write(response.output);
 	});
 }
 
