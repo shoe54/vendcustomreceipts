@@ -14,20 +14,18 @@ function generateReceipt(saleJSONStr, baseURLStr) {
 	);
 }
 
-// Get register sale id
+// Get register sale id and base path
 var n = document.URL.lastIndexOf("/");
 var id = document.URL.substr(n + 1);
 var viewReceiptUrl = parseUrl(document.URL);
 var base = viewReceiptUrl.protocol + "//" + viewReceiptUrl.hostname;
-//alert(base);
   
 // Clear Vend receipt iframe
 var frame = document.getElementById('view-receipt');
 frame.src = '';
 
-// Get register sales info
+// Get register sale info
 var xhr = new XMLHttpRequest();
-//xhr.open('GET', oLocation.href + "api/payment_types", true);
 xhr.open('GET', base + "/api/register_sales/" + id, true);
 xhr.onreadystatechange = function()
 {

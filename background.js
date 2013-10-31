@@ -252,17 +252,6 @@ chrome.webRequest.onCompleted.addListener(
   function(details) {
     if (paymentTypes.getting == false)
 		getFromApi(details.url, paymentTypes, true);
-    
-    /*var xhr = new XMLHttpRequest();
-    xhr.open('GET', details.url, true);
-    xhr.onreadystatechange = function()
-    {
-      if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200)
-      {
-        paymentTypes = JSON.parse(xhr.responseText);
-      }
-    };
-    xhr.send();*/
   },
   {urls: ["*://*/api/payment_types*"]},
   []);

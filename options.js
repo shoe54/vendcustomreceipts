@@ -8,7 +8,7 @@ function restore_options() {
   var templateElem = document.getElementById("template");
   templateElem.value = template;
   
-  // Populate JSON
+  // Populate sale JSON
   $.getJSON(chrome.extension.getURL('/defaultsale.json'), function(defaultSale) {
     if (!defaultSale) {
       return;
