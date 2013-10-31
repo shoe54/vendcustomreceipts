@@ -1,27 +1,27 @@
 {
-  "id": "7e750e11-1cdd-afea-3f95-c55f08a7ab9f",
+  "id": "3b46be9a-850e-9663-3f7a-a218160abe3a",
   "register_id": "3dec442c-41af-11e3-a29a-bc305bf5da20",
   "currency_id": null,
   "market_id": null,
-  "customer_id": "6e373c39-41bc-11e3-a29a-bc305bf5da20",
-  "sale_date": "2013-10-30 23:45:05",
-  "user_name": "test@yahoo.com",
-  "total_price": "7.95",
-  "total_tax": "0.45",
-  "tax_name": "undefined",
+  "customer_id": "null",
+  "sale_date": "2013-10-31 00:29:18",
+  "user_name": "webblazers@yahoo.com",
+  "total_price": "4.95",
+  "total_tax": "0.00",
+  "tax_name": "",
   "receipt_address": "",
   "payment_status": "PENDING",
   "receipt_html_extra": "",
-  "status": "ONACCOUNT",
-  "short_code": "p9688g",
-  "invoice_number": "12",
-  "invoice_sequence": 12,
+  "status": "CLOSED",
+  "short_code": "tks32x",
+  "invoice_number": "28",
+  "invoice_sequence": 28,
   "sync_status": "UPLOAD",
-  "note": "",
+  "note": null,
   "register_sale_products": [
     {
-      "id": "3c93de88-a7fb-4eb7-7781-d2fda80d85d8",
-      "register_sale_id": "7e750e11-1cdd-afea-3f95-c55f08a7ab9f",
+      "id": "e6d91ce4-86c8-a6c4-0e29-5c4748296c94",
+      "register_sale_id": "3b46be9a-850e-9663-3f7a-a218160abe3a",
       "register_id": "3dec442c-41af-11e3-a29a-bc305bf5da20",
       "product_id": "3467e8ef-40df-11e3-a29a-bc305bf5da20",
       "quantity": 1,
@@ -42,49 +42,274 @@
       "image": "https://hotxbuns.vendhq.com/images/placeholder/product/no-image-white-thumb.png",
       "tax_total": "0.00000",
       "total": "4.95"
-    },
-    {
-      "id": "bef3b1f3-f890-ddbe-1ec7-06647e094fbf",
-      "register_sale_id": "7e750e11-1cdd-afea-3f95-c55f08a7ab9f",
-      "register_id": "3dec442c-41af-11e3-a29a-bc305bf5da20",
-      "product_id": "346a282e-40df-11e3-a29a-bc305bf5da20",
-      "quantity": 1,
-      "price": "3.00",
-      "loyalty_value": 0,
-      "price_set": 0,
-      "tax": 0.45,
-      "tax_id": "90f79b14-40df-11e3-a29a-bc305bf5da20",
-      "tax_rate": 0.15,
-      "discount": 0,
-      "status": "VALID",
-      "sync_status": null,
-      "display_retail_price_tax_inclusive": 0,
-      "sequence": 1,
-      "sku": "coffee-hot",
-      "name": "Coffee (Demo)",
-      "description": "<p>A cup of Coffee. You can delete this once you have some other products setup.</p>",
-      "image": "https://hotxbuns.vendhq.com/images/placeholder/product/no-image-white-thumb.png",
-      "tax_total": "0.45000",
-      "total": "3.00"
     }
   ],
   "register_sale_payments": [
     {
-      "id": "a47ad6c3-53fc-8ead-6c70-a32af9a3bc59",
-      "register_sale_id": "7e750e11-1cdd-afea-3f95-c55f08a7ab9f",
+      "id": "aafa75a2-6465-0616-3cf4-493f46932197",
+      "register_sale_id": "3b46be9a-850e-9663-3f7a-a218160abe3a",
       "register_id": "3dec442c-41af-11e3-a29a-bc305bf5da20",
       "source": "",
       "source_id": "",
       "payment_type_id": 1,
       "retailer_payment_type_id": "345cf8b5-40df-11e3-a29a-bc305bf5da20",
-      "payment_date": "2013-10-30 23:44:49",
-      "amount": "5.00",
+      "payment_date": "2013-10-31 00:29:18",
+      "amount": "4.95",
       "payment_data": "",
       "status": "OK",
       "sync_status": null,
       "retailer_payment_type_name": "Cash"
     }
   ],
-  "total": "8.40",
-  "toPay": "2.95"
-} 
+  "total": "4.95",
+  "toPay": "0.00",
+  "config": {
+    "retailer_id": "345269ad-40df-11e3-a29a-bc305bf5da20",
+    "retailer_name": "hotxbuns",
+    "account_state": "trialing",
+    "domain_prefix": "hotxbuns",
+    "display_retail_price_tax_inclusive": "0",
+    "user_id": "347abfa4-40df-11e3-a29a-bc305bf5da20",
+    "user_name": "webblazers@yahoo.com",
+    "user_hash": "R4B772HJ75",
+    "user_display_name": "A cashier",
+    "notify_user_of_feature": false,
+    "account_type": "admin",
+    "outlet_name": "Main Outlet",
+    "outlet_id": "",
+    "version": "8.200",
+    "migrate_sql": [
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN website TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN postal_address1 TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN postal_address2 TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN postal_suburb TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN postal_city TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN postal_postcode TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN postal_state TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN postal_country_id TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN physical_address1 TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN physical_address2 TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN physical_suburb TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN physical_city TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN physical_postcode TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN physical_state TEXT;"
+      },
+      {
+        "version": "6.911",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN physical_country_id TEXT;"
+      },
+      {
+        "version": "6.912",
+        "table": "Register",
+        "query": "ALTER TABLE Register ADD COLUMN ask_for_note_on_save INTEGER;"
+      },
+      {
+        "version": "6.912",
+        "table": "Register",
+        "query": "ALTER TABLE Register ADD COLUMN ask_for_user_on_sale INTEGER;"
+      },
+      {
+        "version": "6.913",
+        "table": "Product",
+        "query": "UPDATE Product set tax_rate = (select rate from Tax where Tax.id = Product.tax_id), tax = (select rate from Tax where Tax.id = Product.tax_id) * price;"
+      },
+      {
+        "version": "6.915",
+        "table": "Config",
+        "query": "ALTER TABLE Config ADD COLUMN culture TEXT DEFAULT 'en-US';"
+      },
+      {
+        "version": "6.915",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN balance FLOAT;"
+      },
+      {
+        "version": "6.915",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN points FLOAT;"
+      },
+      {
+        "version": "6.915",
+        "table": "Customer",
+        "query": "ALTER TABLE Customer ADD COLUMN year_to_date FLOAT;"
+      },
+      {
+        "version": "6.917",
+        "table": "Register",
+        "query": "ALTER TABLE Register ADD COLUMN quick_keys TEXT;"
+      },
+      {
+        "version": "6.921",
+        "table": "RegisterSalePayment",
+        "query": "ALTER TABLE RegisterSalePayment ADD COLUMN retailer_payment_type_id TEXT;"
+      },
+      {
+        "version": "6.922",
+        "table": "Config",
+        "query": "ALTER TABLE Config ADD COLUMN display_retail_price_tax_inclusive INTEGER;"
+      },
+      {
+        "version": "6.924",
+        "table": "RegisterSaleProduct",
+        "query": "ALTER TABLE RegisterSaleProduct ADD COLUMN price_set INTEGER;"
+      },
+      {
+        "version": "6.929",
+        "table": "",
+        "query": "ALTER TABLE PriceBookEntry ADD COLUMN type TEXT;"
+      },
+      {
+        "version": "7.102",
+        "table": "RegisterSale",
+        "query": "ALTER TABLE RegisterSale ADD COLUMN payment_status TEXT;"
+      },
+      {
+        "version": "7.107",
+        "table": "RegisterSaleProduct",
+        "query": "ALTER TABLE RegisterSaleProduct ADD COLUMN register_id TEXT;"
+      },
+      {
+        "version": "7.107",
+        "table": "RegisterSalePayment",
+        "query": "ALTER TABLE RegisterSalePayment ADD COLUMN register_id TEXT;"
+      },
+      {
+        "version": "7.112",
+        "table": "RegisterSaleProduct",
+        "query": "ALTER TABLE RegisterSaleProduct ADD COLUMN sequence INTEGER;"
+      },
+      {
+        "version": "7.115",
+        "table": "PriceBookEntry",
+        "query": "ALTER TABLE PriceBookEntry ADD COLUMN outlet_id TEXT;"
+      },
+      {
+        "version": "8.131",
+        "table": "RegisterSalePayment",
+        "query": "ALTER TABLE RegisterSalePayment ADD COLUMN source TEXT;"
+      },
+      {
+        "version": "8.133",
+        "table": "RegisterSalePayment",
+        "query": "ALTER TABLE RegisterSalePayment ADD COLUMN source_id TEXT;"
+      },
+      {
+        "version": "8.138",
+        "table": "RegisterSale",
+        "query": "ALTER TABLE RegisterSale ADD COLUMN receipt_html_extra TEXT;"
+      },
+      {
+        "version": "8.142",
+        "table": "RegisterSaleProduct",
+        "query": "ALTER TABLE RegisterSaleProduct ADD COLUMN loyalty_value FLOAT;"
+      },
+      {
+        "version": "8.142",
+        "table": "",
+        "query": "ALTER TABLE PriceBookEntry ADD COLUMN loyalty_value FLOAT;"
+      },
+      {
+        "version": "8.181",
+        "table": "RegisterSale",
+        "query": "CREATE INDEX IF NOT EXISTS idx_register_sale_register_id ON RegisterSale(register_id);"
+      },
+      {
+        "version": "8.182",
+        "table": "RegisterSale",
+        "query": "CREATE INDEX IF NOT EXISTS idx_register_sale_sync_status ON RegisterSale(sync_status);"
+      },
+      {
+        "version": "8.183",
+        "table": "RegisterSale",
+        "query": "CREATE INDEX IF NOT EXISTS idx_register_sale_status ON RegisterSale(status);"
+      },
+      {
+        "version": "8.184",
+        "table": "PriceBookEntry",
+        "query": "CREATE INDEX IF NOT EXISTS idx_price_book_entry_product_id ON PriceBookEntry(product_id);"
+      },
+      {
+        "version": "8.185",
+        "table": "Product",
+        "query": "CREATE INDEX IF NOT EXISTS idx_product_sku ON Product(sku);"
+      },
+      {
+        "version": "8.186",
+        "table": "RegisterSaleProduct",
+        "query": "CREATE INDEX IF NOT EXISTS idx_register_sale_product_register_sale_id ON RegisterSaleProduct(register_sale_id);"
+      },
+      {
+        "version": "8.187",
+        "table": "RegisterSalePayment",
+        "query": "CREATE INDEX IF NOT EXISTS idx_register_sale_payment_register_sale_id ON RegisterSalePayment(register_sale_id);"
+      }
+    ],
+    "last_sync": "1970-01-01 00:00:00",
+    "currency_name": "$",
+    "currency": "NZD",
+    "culture": "en-US",
+    "default_customer_group_id": "345d9321-40df-11e3-a29a-bc305bf5da20",
+    "default_customer_id": "345dfdb8-40df-11e3-a29a-bc305bf5da20",
+    "discount_product_id": "60d6a690-40df-11e3-a29a-bc305bf5da20",
+    "cashier_discount": true,
+    "enable_loyalty": false,
+    "loyalty_ratio": 0,
+    "callbacks": {}
+  }
+}

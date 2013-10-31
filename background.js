@@ -9,7 +9,7 @@ var n = this,
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
 
-var paymentTypes;
+var paymentTypes, config;
 
 function parseUrl( url ) {
     var a = document.createElement('a');
@@ -95,6 +95,9 @@ function extendSaleJSON(saleJSON) {
 	}
 	saleJSON.toPay = toPay.formatMoney();
 	
+	// Include config info 
+	saleJSON.config = config.config;
+	
 	return saleJSON;
 }
 
@@ -135,17 +138,22 @@ chrome.webRequest.onBeforeRequest.addListener(
     //alert(details.requestBody.raw)
     var template = localStorage["template"];
 
- 	// Inject useful data into sale JSON
     var saleJSON = JSON.parse(saleJSONStr);
-	saleJSON = extendSaleJSON(saleJSON);
+	
+	// If sale status is not VOIDED, print receipt
+	if (saleJSON.status != "VOIDED") {
+      // Inject useful data into sale JSON
+	  saleJSON = extendSaleJSON(saleJSON);
 
-    var receipt = generateReceipt(template, saleJSON);
-    var myWindow=window.open('','');
-    myWindow.document.write(receipt);
-    myWindow.document.close();
-    myWindow.focus();
-    myWindow.print();
-    myWindow.close();
+      var receipt = generateReceipt(template, saleJSON);
+      var myWindow=window.open('','');
+      myWindow.document.write(receipt);
+      myWindow.document.close();
+      myWindow.focus();
+      myWindow.print();
+      myWindow.close();
+	}
+	
     return {cancel: false};
   },
   {urls: ["*://*/api/register_sales"]},
@@ -167,4 +175,20 @@ chrome.webRequest.onCompleted.addListener(
     xhr.send();
   },
   {urls: ["*://*/api/payment_types*"]},
+  []);
+
+chrome.webRequest.onCompleted.addListener(
+  function(details) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', details.url, true);
+    xhr.onreadystatechange = function()
+    {
+      if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200)
+      {
+        config = JSON.parse(xhr.responseText);
+      }
+    };
+    xhr.send();
+  },
+  {urls: ["*://*/api/config*"]},
   []);

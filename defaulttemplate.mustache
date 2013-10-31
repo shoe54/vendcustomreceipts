@@ -1,5 +1,5 @@
 <div id="receipt" style="text-align: center;">
-        <div id="receipt-header"><h1>XYZ Store</h1><h1></h1></div>
+        <div id="receipt-header"><h1>{{config.retailer_name}}</h1><h1></h1></div>
 
 <div id="receipt-customer">
     </div>
@@ -8,7 +8,7 @@
 
 <h1 id="invoice-title">Receipt / Tax Invoice</h1>
 
-<div id="receipt-meta"><span class="invoice-number">Invoice #: {{invoice_number}}</span> <span class="date">{{sale_date}}</span> </div>
+<div id="receipt-meta"><span class="invoice-number">Invoice #: {{invoice_number}}</span> <span class="date">{{sale_date}}</span> <span>Served by {{config.user_display_name}}</span></div>
 
 <div id="receipt-meta-extra"></div>
 
@@ -37,7 +37,7 @@
             <td class="total-item">
                 <span id="subtotal-label">Subtotal</span>
             </td>
-            <td id="sale-subtotal" class="total-amount" style="color: rgb(0, 0, 0);">${{total_price}}</td>
+            <td id="sale-subtotal" class="total-amount" style="color: rgb(0, 0, 0);">{{config.currency_name}}{{total_price}}</td>
             <td class="action"></td>
         </tr>
         <tr>
@@ -45,14 +45,14 @@
                 <span id="tax-label">Tax</span>
                 <span id="tax-name"></span>
             </td>
-            <td id="sale-totals-taxes" class="total-amount " style="color: rgb(0, 0, 0);">${{total_tax}}</td>
+            <td id="sale-totals-taxes" class="total-amount " style="color: rgb(0, 0, 0);">{{config.currency_name}}{{total_tax}}</td>
             <td class="action"><span><a href="#delete-tax" id="btn-remove-tax" class="circle-btn circle-btn--danger touchscreen-btn" title="Remove the tax from the sale"><i class="icon-general-cross-white"></i></a></span></td>
         </tr>
         <tr class="sub-total">
             <td class="total-item">
                 <span id="total-label">TOTAL</span>
             </td>
-            <td id="sale-totals-total" class="total-amount" style="color: rgb(0, 0, 0);">${{total}}</td>
+            <td id="sale-totals-total" class="total-amount" style="color: rgb(0, 0, 0);">{{config.currency_name}}{{total}}</td>
             <td class="action"></td>
         </tr>
     </tbody>
@@ -63,7 +63,7 @@
             <td class="total-item">
                 <span id="item-label">{{retailer_payment_type_name}}</span>
             </td>
-            <td class="total-amount" style="color: rgb(0, 0, 0);">$ {{amount}}</td>
+            <td class="total-amount" style="color: rgb(0, 0, 0);">{{config.currency_name}}{{amount}}</td>
             <td class="action"></td>
         </tr>
 		{{/register_sale_payments}}
@@ -71,7 +71,7 @@
             <td class="total-item">
                 <span class="topay-label">TO PAY</span>
             </td>
-            <td class=" payment-totals-topay total-amount" style="color: rgb(0, 0, 0);">$ {{toPay}}</td>
+            <td class=" payment-totals-topay total-amount" style="color: rgb(0, 0, 0);">{{config.currency_name}}{{toPay}}</td>
             <td class="action"></td>
         </tr>
     </tbody>
