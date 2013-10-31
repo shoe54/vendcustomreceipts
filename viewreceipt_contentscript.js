@@ -4,11 +4,14 @@ function parseUrl( url ) {
     return a;
 }
 
-function generateReceipt(saleJSONStr) {
-	chrome.runtime.sendMessage({"command": "generateReceipt", "saleJSONStr": saleJSONStr}, function(response) {
-		document.getElementById('view-receipt').contentWindow.document.write("<style type=\"text/css\" media=\"print\">.no-print, .no-print * { display: none !important; }</style><button class=\"no-print\" onClick=\"window.print()\" >Print</button>");
-		document.getElementById('view-receipt').contentWindow.document.write(response.output);
-	});
+function generateReceipt(saleJSONStr, baseURLStr) {
+	chrome.runtime.sendMessage(
+		{"command": "generateReceipt", "saleJSONStr": saleJSONStr, "baseURLStr": baseURLStr}, 
+		function(response) {
+			document.getElementById('view-receipt').contentWindow.document.write("<style type=\"text/css\" media=\"print\">.no-print, .no-print * { display: none !important; }</style><button class=\"no-print\" onClick=\"window.print()\" >Print</button>");
+			document.getElementById('view-receipt').contentWindow.document.write(response.output);
+		}
+	);
 }
 
 // Get register sale id
@@ -30,7 +33,7 @@ xhr.onreadystatechange = function()
 {
     if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200)
     {
-        generateReceipt(xhr.responseText);
+        generateReceipt(xhr.responseText, base);
     }
 };
 xhr.send();

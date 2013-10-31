@@ -9,7 +9,8 @@ var n = this,
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };*/
 
-var paymentTypes, config;
+var paymentTypes = {getting: false};
+var config = {getting: false};
 
 function formatMoney(n, c, d, t) {
  var c = isNaN(c = Math.abs(c)) ? 2 : c, 
@@ -24,6 +25,14 @@ function formatMoney(n, c, d, t) {
     var a = document.createElement('a');
     a.href = url;
     return a;
+}
+
+function getBaseUrl(urlStr) {
+	var n = urlStr.lastIndexOf("/");
+	var id = urlStr.substr(n + 1);
+	var parsedUrl = parseUrl(urlStr);
+	var base = parsedUrl.protocol + "//" + parsedUrl.hostname;
+	return base;
 }*/
 
 // Called when the url of a tab changes.
@@ -88,12 +97,12 @@ function normalizeSaleJSONFromSellScreen(saleJSON) {
 
 	  // Specify readable payment types
       for (var i = 0; i < current_register_sales.register_sale_payments.length; i++) {
-      for (var j = 0; j < paymentTypes.payment_types.length; j++) {
-	    if (current_register_sales.register_sale_payments[i].retailer_payment_type_id == paymentTypes.payment_types[j].id) {
+      for (var j = 0; j < paymentTypes.Value.payment_types.length; j++) {
+	    if (current_register_sales.register_sale_payments[i].retailer_payment_type_id == paymentTypes.Value.payment_types[j].id) {
 		  //if (saleJSON.register_sale_payments[i].amount < 0)
 		  //  saleJSON.register_sale_payments[i].name = "Change";
 		  //else
-		    current_register_sales.register_sale_payments[i].name = paymentTypes.payment_types[j].name;
+		    current_register_sales.register_sale_payments[i].name = paymentTypes.Value.payment_types[j].name;
 		  break;
 		}
 	  }
@@ -124,7 +133,7 @@ function normalizeSaleJSONFromSellScreen(saleJSON) {
 function extendSaleJSON(saleJSON) {
 
 	// Include config info 
-	saleJSON.config = config.config;
+	saleJSON.config = config.Value.config;
 	
 	return saleJSON;
 }
@@ -165,12 +174,40 @@ chrome.pageAction.onClicked.addListener(openOptions);
 
 initDefaults();
 
+function getFromApi(urlStr, storage, async) {
+    var xhr = new XMLHttpRequest();
+	//storage.Value = {}; // So that callers know that this call is in progress
+    xhr.open('GET', urlStr, async);
+	if (async) {
+		storage.getting = true;
+		xhr.onreadystatechange = function()
+		{
+			if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200)
+			{
+				storage.Value = JSON.parse(xhr.responseText);
+				storage.getting = false;
+			}
+		};
+		xhr.send();
+	} else {
+		xhr.send();
+		if (xhr.status == 200) {
+			storage.Value = JSON.parse(xhr.responseText);
+		}
+	}
+}
+
+// Listen to messages sent from content script
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     /*console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
                 "from the extension");*/
     if (request.command == "generateReceipt") {
+	  // If the Vend sell screen isn't loaded before the receipt page is loaded, config will not yet have been loaded
+	  if (config.Value == undefined) {
+		getFromApi(request.baseURLStr + "/api/config", config, false);
+	  }
 	  var saleJSON = extendSaleJSON(JSON.parse(request.saleJSONStr));
       var template = localStorage["template"];
 	  var receipt = generateReceipt(template, saleJSON);
@@ -213,9 +250,10 @@ chrome.webRequest.onBeforeRequest.addListener(
   
 chrome.webRequest.onCompleted.addListener(
   function(details) {
-	//var oLocation = parseUrl(details.url);
-    var xhr = new XMLHttpRequest();
-    //xhr.open('GET', oLocation.href + "api/payment_types", true);
+    if (paymentTypes.getting == false)
+		getFromApi(details.url, paymentTypes, true);
+    
+    /*var xhr = new XMLHttpRequest();
     xhr.open('GET', details.url, true);
     xhr.onreadystatechange = function()
     {
@@ -224,23 +262,15 @@ chrome.webRequest.onCompleted.addListener(
         paymentTypes = JSON.parse(xhr.responseText);
       }
     };
-    xhr.send();
+    xhr.send();*/
   },
   {urls: ["*://*/api/payment_types*"]},
   []);
 
 chrome.webRequest.onCompleted.addListener(
   function(details) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', details.url, true);
-    xhr.onreadystatechange = function()
-    {
-      if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200)
-      {
-        config = JSON.parse(xhr.responseText);
-      }
-    };
-    xhr.send();
+    if (config.getting == false)
+		getFromApi(details.url, config, true);
   },
   {urls: ["*://*/api/config*"]},
   []);
