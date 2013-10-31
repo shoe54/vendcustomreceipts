@@ -1,4 +1,4 @@
-Number.prototype.formatMoney = function(c, d, t){
+/*Number.prototype.formatMoney = function(c, d, t){
 var n = this, 
     c = isNaN(c = Math.abs(c)) ? 2 : c, 
     d = d == undefined ? "." : d, 
@@ -7,15 +7,24 @@ var n = this,
     i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
     j = (j = i.length) > 3 ? j % 3 : 0;
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-};
+};*/
 
 var paymentTypes, config;
 
-function parseUrl( url ) {
+function formatMoney(n, c, d, t) {
+ var c = isNaN(c = Math.abs(c)) ? 2 : c, 
+     d = d == undefined ? "." : d, 
+     t = t == undefined ? "," : t, 
+     s = n < 0 ? "-" : "", 
+     i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+     j = (j = i.length) > 3 ? j % 3 : 0;
+   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+}
+/*function parseUrl( url ) {
     var a = document.createElement('a');
     a.href = url;
     return a;
-}
+}*/
 
 // Called when the url of a tab changes.
 function checkForValidUrl(tabId, changeInfo, tab) {
@@ -120,29 +129,29 @@ function extendSaleJSON(saleJSON) {
 	return saleJSON;
 }
 
-function formatMoney(saleJSON) {
+function formatSaleJSONMoneys(saleJSON) {
     for (var n = 0; n < saleJSON.register_sales.length; n++) {
 		var current_register_sales = saleJSON.register_sales[n];
 
 		for (var i = 0; i < current_register_sales.register_sale_products.length; i++) {
-		  current_register_sales.register_sale_products[i].price_total = current_register_sales.register_sale_products[i].price_total.formatMoney();
-		  current_register_sales.register_sale_products[i].price = current_register_sales.register_sale_products[i].price.formatMoney();
+		  current_register_sales.register_sale_products[i].price_total = formatMoney(current_register_sales.register_sale_products[i].price_total);
+		  current_register_sales.register_sale_products[i].price = formatMoney(current_register_sales.register_sale_products[i].price);
 		}
 		//saleJSON.total = total.formatMoney();
-		current_register_sales.totals.total_price = current_register_sales.totals.total_price.formatMoney();
-		current_register_sales.totals.total_tax = current_register_sales.totals.total_tax.formatMoney();
-		current_register_sales.totals.total_to_pay = current_register_sales.totals.total_to_pay.formatMoney();
-		current_register_sales.totals.total_payment = current_register_sales.totals.total_payment.formatMoney();
+		current_register_sales.totals.total_price = formatMoney(current_register_sales.totals.total_price);
+		current_register_sales.totals.total_tax = formatMoney(current_register_sales.totals.total_tax);
+		current_register_sales.totals.total_to_pay = formatMoney(current_register_sales.totals.total_to_pay);
+		current_register_sales.totals.total_payment = formatMoney(current_register_sales.totals.total_payment);
 		
 		for (var i = 0; i < current_register_sales.register_sale_payments.length; i++) {
-		  current_register_sales.register_sale_payments[i].amount = current_register_sales.register_sale_payments[i].amount.formatMoney();
+		  current_register_sales.register_sale_payments[i].amount = formatMoney(current_register_sales.register_sale_payments[i].amount);
 		}
     }
 }
 
 function generateReceipt(template, saleJSON) {
   //var saleJSON = JSON.parse(saleJSONStr);
-  formatMoney(saleJSON);
+  formatSaleJSONMoneys(saleJSON);
   
   console.log("Generating receipt for " + JSON.stringify(saleJSON, undefined, 2));  
   var output = Mustache.render(template, saleJSON);
