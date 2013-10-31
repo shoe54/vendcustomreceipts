@@ -1,7 +1,6 @@
 {
   "manifest_version": 2,
   "name": "Vend Receipt Customizer",
-  //"short_name": "Vend Receipt",
   "version": "1.0",
   "description": "Customize your Vend receipts the way you want to.",
   "icons": { "128": "images/icon_128.png" },
