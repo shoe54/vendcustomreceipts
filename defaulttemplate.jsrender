@@ -5,6 +5,10 @@
 #receipt-customer {
     text-align:start;
 }
+#receipt-note {
+    text-align:start;
+	white-space: pre;
+}
 </style>
 
 {{for register_sales}}
@@ -14,7 +18,7 @@
 
 <div id="receipt-customer">
     {{if customer && customer.name}}
-        {{:customer.name}} Phone: {{:customer.contact.phone}}
+        {{:customer.name}} {{:customer.contact.phone}}
     {{/if}}                    
 </div>
 
@@ -99,7 +103,12 @@
 
 <div class="clearer"></div>
 
-<div id="receipt-note"></div>
+<div id="receipt-note">
+{{if note && note.length > 0}}
+Notes:
+{{:note}}
+{{/if}}
+</div>
 
 <div class="clearer"></div>
 
