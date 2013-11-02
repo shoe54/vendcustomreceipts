@@ -1,9 +1,22 @@
+<style type="text/css">
+#receipt {
+    text-align:center;
+}
+#receipt-customer {
+    text-align:start;
+}
+</style>
+
 {{for register_sales}}
-<div id="receipt" style="text-align: center;">
+<div id="receipt">
 
 <div id="receipt-header"><h1>{{:~root.config.retailer_name}}</h1><h1></h1></div>
 
-<div id="receipt-customer"></div>
+<div id="receipt-customer">
+    {{if customer && customer.name}}
+        {{:customer.name}} Phone: {{:customer.contact.phone}}
+    {{/if}}                    
+</div>
 
 <div class="clearer"></div>
 
