@@ -21,19 +21,19 @@ function formatMoney(n, c, d, t) {
      j = (j = i.length) > 3 ? j % 3 : 0;
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 }
-/*function parseUrl( url ) {
+function parseUrl( url ) {
     var a = document.createElement('a');
     a.href = url;
     return a;
 }
 
 function getBaseUrl(urlStr) {
-	var n = urlStr.lastIndexOf("/");
-	var id = urlStr.substr(n + 1);
+	//var n = urlStr.lastIndexOf("/");
+	//var id = urlStr.substr(n + 1);
 	var parsedUrl = parseUrl(urlStr);
 	var base = parsedUrl.protocol + "//" + parsedUrl.hostname;
 	return base;
-}*/
+}
 
 // Called when the url of a tab changes.
 function checkForValidUrl(tabId, changeInfo, tab) {
@@ -80,7 +80,7 @@ function initDefaults() {
     xhr.send();
 }*/
 
-function normalizeSaleJSONFromSellScreen(saleJSON) {
+function normalizeSaleJSONFromSellScreen(saleJSON, baseURLStr) {
 	var ret = {};
 	
     // JSON coming in from api/register_sales is wrapped in register_sales but not from the sell screen
@@ -97,16 +97,16 @@ function normalizeSaleJSONFromSellScreen(saleJSON) {
 
 	  // Specify readable payment types
       for (var i = 0; i < current_register_sales.register_sale_payments.length; i++) {
-      for (var j = 0; j < paymentTypes.Value.payment_types.length; j++) {
-	    if (current_register_sales.register_sale_payments[i].retailer_payment_type_id == paymentTypes.Value.payment_types[j].id) {
-		  //if (saleJSON.register_sale_payments[i].amount < 0)
-		  //  saleJSON.register_sale_payments[i].name = "Change";
-		  //else
+        for (var j = 0; j < paymentTypes.Value.payment_types.length; j++) {
+	      if (current_register_sales.register_sale_payments[i].retailer_payment_type_id == paymentTypes.Value.payment_types[j].id) {
+		    //if (saleJSON.register_sale_payments[i].amount < 0)
+		    //  saleJSON.register_sale_payments[i].name = "Change";
+		    //else
 		    current_register_sales.register_sale_payments[i].name = paymentTypes.Value.payment_types[j].name;
-		  break;
-		}
-	  }
-	  }
+		    break;
+		  }
+	    }
+      }
 	
       // Calculate totals
       for (var i = 0; i < current_register_sales.register_sale_products.length; i++) {
@@ -117,7 +117,7 @@ function normalizeSaleJSONFromSellScreen(saleJSON) {
 	  var toPay = total;
 	
       for (var i = 0; i < current_register_sales.register_sale_payments.length; i++) {
-	  toPay = toPay - current_register_sales.register_sale_payments[i].amount;
+	    toPay = toPay - current_register_sales.register_sale_payments[i].amount;
 	  }
 	  current_register_sales.totals = { 
      "total_to_pay"    :   toPay, 
@@ -125,6 +125,18 @@ function normalizeSaleJSONFromSellScreen(saleJSON) {
      "total_price" :   current_register_sales.total_price,
 	 "total_payment" : current_register_sales.total_tax + current_register_sales.total_price
       };
+	  
+  	  // Include customer info
+	  if (current_register_sales.customer_id != undefined && current_register_sales.customer_id != "null" && current_register_sales.customer_id.length > 0) {
+		var customer = {getting: false};
+		getFromApi(baseURLStr + "/api/customers/" + current_register_sales.customer_id, customer, false);
+        for (var i = 0; i < customer.Value.customers.length; i++) {
+		  if (customer.Value.customers[i].id == current_register_sales.customer_id) {
+	        current_register_sales.customer = customer.Value.customers[i];
+			break;
+		  }
+		}
+	  }
 	}
 	
 	return ret;
@@ -134,7 +146,7 @@ function extendSaleJSON(saleJSON) {
 
 	// Include config info 
 	saleJSON.config = config.Value.config;
-	
+
 	return saleJSON;
 }
 
@@ -231,7 +243,8 @@ chrome.webRequest.onBeforeRequest.addListener(
 	// If sale status is not VOIDED, print receipt
 	if (saleJSON.status != "VOIDED") {
       // Inject useful data into sale JSON
-	  saleJSON = normalizeSaleJSONFromSellScreen(saleJSON);
+      var base = getBaseUrl(details.url);
+	  saleJSON = normalizeSaleJSONFromSellScreen(saleJSON, base);
 	  saleJSON = extendSaleJSON(saleJSON);
 
       var receipt = generateReceipt(template, saleJSON);
